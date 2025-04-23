@@ -548,11 +548,11 @@ def count_escape_routes(board, king_pos):
     
     return escape_routes
 
-def evaluate_board(board):
+def evaluate_board(board,initial_depth,depth):
     # Find king position efficiently
     king_indices = np.where(board == Pawn.KING)
     if king_indices[0].size == 0:
-        return 1000  # King captured → attackers win
+        return 1000-(initial_depth-depth)  # King captured → attackers win
     
     # Extract position once
     x, y = king_indices[0][0], king_indices[1][0]
@@ -561,7 +561,7 @@ def evaluate_board(board):
     almost_edge_positions = {(1,0), (2,0), (0,1), (0,2), (0,6), (0,7), (6,0), (7,0),
                           (1,8), (2,8), (6,8), (7,8), (8,1), (8,2), (8,6), (8,7)}
     if (x, y) in almost_edge_positions:
-        return -1000
+        return -1000+(initial_depth-depth)  # King in almost-edge position → defenders win
     
     # Count pieces directly using np.sum
     attackers = np.sum(board == Pawn.BLACK)
@@ -612,7 +612,7 @@ def minimax(state, depth, maximizing_player, is_attacker_turn):
                 best_move = move
         return min_eval, best_move
     
-def minimaxbeta(state, depth, alpha, beta, maximizing_player, is_attacker_turn, start_time, max_time):
+def minimaxbeta(state,initial_depth, depth, alpha, beta, maximizing_player, is_attacker_turn, start_time, max_time):
     if depth == 0 or state.is_game_over():
         return evaluate_board(state.get_board()), None
 
@@ -628,6 +628,7 @@ def minimaxbeta(state, depth, alpha, beta, maximizing_player, is_attacker_turn, 
 
         eval,_ = minimaxbeta(
             statecopy,
+            initial_depth,
             depth - 1,
             alpha,
             beta,
@@ -681,7 +682,7 @@ def iterative_deepening(state, max_time, maximizing_player, is_attacker_turn):
             break  # Interrompi se abbiamo superato il limite
         try:
             eval_current, move_current = minimaxbeta(
-                state, current_depth, 
+                state, current_depth,current_depth, 
                 -math.inf, math.inf, 
                 maximizing_player, is_attacker_turn,
                 start_time, max_time
