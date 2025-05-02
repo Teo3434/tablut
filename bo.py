@@ -216,8 +216,8 @@ class State:
                 if self.board[6, 4] == Pawn.BLACK and self.board[5, 3] == Pawn.BLACK:
                     self._capture_king(king_row, king_col, real)
             else:  # Posizione normale
-                if (king_col > 1 and (self.board[king_row, king_col - 1] == Pawn.BLACK or 
-                    (king_row, king_col - 1) in citadels)):
+                if (self.board[king_row, king_col - 1] == Pawn.BLACK or 
+                    (king_row, king_col - 1) in citadels):
                     self._capture_king(king_row, king_col, real)
 
     def _check_capture_king_right(self, king_row, king_col, real):
@@ -238,8 +238,8 @@ class State:
                 if self.board[3, 3] == Pawn.BLACK and self.board[5, 3] == Pawn.BLACK:
                     self._capture_king(king_row, king_col, real)
             else:  # Posizione normale
-                if (king_col < 7 and (self.board[king_row, king_col + 1] == Pawn.BLACK or 
-                    (king_row, king_col + 1) in citadels)):
+                if (self.board[king_row, king_col + 1] == Pawn.BLACK or 
+                    (king_row, king_col + 1) in citadels):
                     self._capture_king(king_row, king_col, real)
 
     def _check_capture_king_down(self, king_row, king_col, real):
@@ -260,8 +260,8 @@ class State:
                 if self.board[4, 6] == Pawn.BLACK and self.board[5, 5] == Pawn.BLACK:
                     self._capture_king(king_row, king_col, real)
             else:  # Posizione normale
-                if (king_row < 7 and (self.board[king_row + 1, king_col] == Pawn.BLACK or 
-                    (king_row + 1, king_col) in citadels)):
+                if (self.board[king_row + 1, king_col] == Pawn.BLACK or 
+                    (king_row + 1, king_col) in citadels):
                     self._capture_king(king_row, king_col, real)
 
     def _check_capture_king_up(self, king_row, king_col, real):
@@ -282,8 +282,8 @@ class State:
                 if self.board[4, 6] == Pawn.BLACK and self.board[3, 5] == Pawn.BLACK:
                     self._capture_king(king_row, king_col, real)
             else:  # Posizione normale
-                if (king_row > 1 and (self.board[king_row - 1, king_col] == Pawn.BLACK or 
-                    (king_row - 1, king_col) in citadels)):
+                if (self.board[king_row - 1, king_col] == Pawn.BLACK or 
+                    (king_row - 1, king_col) in citadels):
                     self._capture_king(king_row, king_col, real)
 
     def _capture_king(self, king_row, king_col, real):
