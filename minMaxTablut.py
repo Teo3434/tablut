@@ -614,7 +614,7 @@ def minimax(state, depth, maximizing_player, is_attacker_turn):
     
 def minimaxbeta(state,initial_depth, depth, alpha, beta, maximizing_player, is_attacker_turn, start_time, max_time):
     if depth == 0 or state.is_game_over():
-        return evaluate_board(state.get_board()), None
+        return evaluate_board(state.get_board(),initial_depth, depth), None
 
     best_move = None
     for move in state.get_legal_moves():
@@ -643,14 +643,15 @@ def minimaxbeta(state,initial_depth, depth, alpha, beta, maximizing_player, is_a
                 alpha = eval
                 best_move = move
             if beta <= alpha:
-                break  # 🔪 Beta cut
+                break  
         else:
             if eval < beta:
                 beta = eval
                 best_move = move
             if beta <= alpha:
-                break  # 🔪 Alpha cut
-
+                break
+    
+    
     return (alpha, best_move) if maximizing_player else (beta, best_move)
 
 # Funzione iterative deepening che utilizza minimaxbeta con potatura alpha-beta.
@@ -699,7 +700,9 @@ def iterative_deepening(state, max_time, maximizing_player, is_attacker_turn):
         # Se il valore è abbastanza alto (o basso per MIN) e non si prevede un cambiamento, potremmo interrompere qui
         # (questa è una possibile ottimizzazione aggiuntiva)
         current_depth += 1
-
+        print(best_move)
+        print(best_eval)
+        print(current_depth)
     return best_move, best_eval, current_depth - 1
 
 
@@ -715,6 +718,7 @@ def recvall(sock, n):
 
 def convert_move_for_server(move, color):
     # mossa è una tupla (riga da, colonna da, riga a, colonna a)
+    print(move)
     from_row, from_col, to_row, to_col = move
     
     # Convertiamo le righe in notazione scacchistica
@@ -791,6 +795,8 @@ def main():
                     is_attacker_turn=True
                     alpha=-math.inf
                     beta=math.inf
+                print('sono qui')
+
                 move,_,_ = iterative_deepening(state, timeout, maximizing_player, is_attacker_turn)
                 print(move)
                 move_for_server = convert_move_for_server(move, color_move)
